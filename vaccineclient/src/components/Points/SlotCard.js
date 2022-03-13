@@ -44,8 +44,9 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderTop: '1px solid rgba(0, 0, 0, .125)',
 }));
 
-export default function SlotCard({slot}) {
+export default function SlotCard({slot }) {
   const [expanded, setExpanded] = React.useState('panel1');
+  const[isDisabled,setDisable] = React.useState(slot.currentReservation >=  slot.capacity);
 
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
@@ -57,29 +58,46 @@ export default function SlotCard({slot}) {
     <div>
       <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
         <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-          <Typography>{slot.number}</Typography>
+          <Typography>{"Slot"}</Typography>
          
        
          
         </AccordionSummary>
         <AccordionDetails>
-        <Typography >{slot.duration}</Typography>
+        <Typography >{slot.startTime+ " to " +slot.endTime}</Typography>
           <Typography>
-            {"Number of reservation "+ slot.currentReservation +" out of "+ slot.totalCapacity}
+            {"Number of reservation "+ slot.currentReservation +" out of  "+ slot.capacity}
           </Typography>
-          <Button 
+        {isDisabled && <Button 
           endIcon={<BookmarkAddedIcon />}
                 variant="contained"
-                disableElevation
+                
+                 disabled 
+                style={{
+                  color:"white",
+                  backgroundColor: "rgb(142,196,163,.8)",
+                  border: "solid",
+                  marginRight: 10,
+
+                }}
+            onClick={handleReserve}>
+                Reserve
+            </Button>}
+            {!isDisabled && <Button 
+          endIcon={<BookmarkAddedIcon />}
+                variant="contained"
+                
+                //  disabled = {isDisabled}
                 style={{
                   color:"white",
                   backgroundColor: "#006666",
                   border: "solid",
                   marginRight: 10,
+
                 }}
             onClick={handleReserve}>
                 Reserve
-            </Button>
+            </Button>}
         </AccordionDetails>
       </Accordion>
       

@@ -8,42 +8,23 @@ import Navbar from "../Navbar";
 const AllPoints = ({history}) => {
   //on opening the page this data should be fetched from the backend
   const [points, setPoints] = useState([]);
-  const data = [{id:1 , title:"shq " , openTime :"10 am " , closeTime :"8 pm " ,location:"hey I am captain tarek and it will be great to see you soon " , phoneNumber:"01201687799",
-sports:[{number:"slot 1",currentReservation:"2" , totalCapacity:"4" ,duration:"10 am to 11 am"},{number:"slot 2",sport:"fittness"},{number:"slot 3",sport:"yoga"}], achievements:[{achievement:"Africa championship" , date:"30/12/2021"},{achievement:"Egypt championship" , date:"12/1/2020"}] },
-{id:2 , name:"Tarek Ashor" , location:"hey I am captain tarek and it will be great to see you soon " , phoneNumber:"01201687799",
-sports:[{sport:"kick boxing"},{sport:"fittness"},{sport:"yoga"}], achievements:[{achievement:"Africa championship" , date:"30/12/2021"},{achievement:"Egypt championship" , date:"12/1/2020"}] },
-{id:3 , name:"Tarek Ashor" , location:"hey I am captain tarek and it will be great to see you soon " , phoneNumber:"01201687799",
-sports:[{sport:"kick boxing"},{sport:"fittness"},{sport:"yoga"}], achievements:[{achievement:"Africa championship" , date:"30/12/2021"},{achievement:"Egypt championship" , date:"12/1/2020"}] },
-{id:4 , name:"Tarek Ashor" , location:"hey I am captain tarek and it will be great to see you soon " , phoneNumber:"01201687799",
-sports:[{sport:"kick boxing"},{sport:"fittness"},{sport:"yoga"}], achievements:[{achievement:"Africa championship" , date:"30/12/2021"},{achievement:"Egypt championship" , date:"12/1/2020"}] },
-{id:5 , name:"Tarek Ashor" , location:"hey I am captain tarek and it will be great to see you soon " , phoneNumber:"01201687799",
-sports:[{sport:"kick boxing"},{sport:"fittness"},{sport:"yoga"}], achievements:[{achievement:"Africa championship" , date:"30/12/2021"},{achievement:"Egypt championship" , date:"12/1/2020"}] },
-{id:6 , name:"Tarek Ashor" , location:"hey I am captain tarek and it will be great to see you soon " , phoneNumber:"01201687799",
-sports:[{sport:"kick boxing"},{sport:"fittness"},{sport:"yoga"}], achievements:[{achievement:"Africa championship" , date:"30/12/2021"},{achievement:"Egypt championship" , date:"12/1/2020"}] },
-{id:7 , name:"Tarek Ashor" , location:"hey I am captain tarek and it will be great to see you soon " , phoneNumber:"01201687799",
-sports:[{sport:"kick boxing"},{sport:"fittness"},{sport:"yoga"}], achievements:[{achievement:"Africa championship" , date:"30/12/2021"},{achievement:"Egypt championship" , date:"12/1/2020"}] },
-{id:8 , name:"Tarek Ashor" , location:"hey I am captain tarek and it will be great to see you soon " , phoneNumber:"01201687799",
-sports:[{sport:"kick boxing"},{sport:"fittness"},{sport:"yoga"}], achievements:[{achievement:"Africa championship" , date:"30/12/2021"},{achievement:"Egypt championship" , date:"12/1/2020"}] },
-{id:9 , name:"Tarek Ashor" , bio:"hey I am captain tarek and it will be great to see you soon " , phoneNumber:"01201687799",
-sports:[{sport:"kick boxing"},{sport:"fittness"},{sport:"yoga"}], achievements:[{achievement:"Africa championship" , date:"30/12/2021"},{achievement:"Egypt championship" , date:"12/1/2020"}] },
-{id:10 , name:"Tarek Ashor" , bio:"hey I am captain tarek and it will be great to see you soon " , phoneNumber:"01201687799",
-sports:[{sport:"kick boxing"},{sport:"fittness"},{sport:"yoga"}], achievements:[{achievement:"Africa championship" , date:"30/12/2021"},{achievement:"Egypt championship" , date:"12/1/2020"}] }]
 
   useEffect(() => {
-      setPoints(data);
-//     var myHeaders = new Headers();
-//     myHeaders.append("Content-Type", "application/json");
-//     var requestOptions = {
-//       method: "GET",
-//       headers: myHeaders,
-//       redirect: "follow",
-//     };
-//     fetch("http://localhost:8082/api/static/trainers", requestOptions)
-//       .then((response) => response.json())
-//       .then((data)=>{
-//        // s etTrainers(data);
-//       })
-//       .catch((error) => console.log("error", error));
+      
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+    fetch("https://us-central1-cegedim-1d756.cloudfunctions.net/locations", requestOptions)
+      .then((response) => response.json())
+      .then((data)=>{
+        console.log(data);
+        setPoints(data);
+      })
+      .catch((error) => console.log("error", error));
    },[]);
 
   return (
@@ -69,7 +50,8 @@ sports:[{sport:"kick boxing"},{sport:"fittness"},{sport:"yoga"}], achievements:[
         {points.map((point) => {
           return (
             <Grid item xs={2} sm={4} md={4}>
-              <PointCard point={point} />
+
+              <PointCard point={point} url={"https://us-central1-cegedim-1d756.cloudfunctions.net/"+"bookings/"+point.id}/>
             </Grid>
           );
         })}

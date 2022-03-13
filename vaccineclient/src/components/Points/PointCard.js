@@ -16,16 +16,16 @@ import MyLocationIcon from '@mui/icons-material/MyLocation';
 import { ReactSession } from 'react-client-session';
 import Grid from "@mui/material/Grid";
 
-export default function PointCard({ point }) {
+export default function PointCard({ point ,url}) {
   const [expanded, setExpanded] = React.useState(false);
-  const [value, setValue] = React.useState(2);
+  const [value, setValue] = React.useState(point.rate);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
   const handleMap = () => {
-    console.log("google map")
+    console.log(url)
 };
 
   return (
@@ -43,11 +43,11 @@ export default function PointCard({ point }) {
             {point.id}
           </Avatar>
         }
-        title={point.title}
+        title={point.name}
         subheader={
          
           <Typography style={{ color: "white", fontSize: 14 }}>
-            {"Bio: "}
+            {"Location: "}
             {point.location} 
           </Typography>
          
@@ -81,13 +81,13 @@ export default function PointCard({ point }) {
           <Grid item xs={12} sm={6}>
           <Typography style={{ color: "white", fontSize: 14 }}>
             {"open time: "}
-            {point.openTime} 
+            {point.openingTime} 
             </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
             <Typography style={{ color: "white", fontSize: 14 }}>
             {"close time: "}
-            {point.closeTime}    
+            {point.closingTime}    
          
           </Typography>
           </Grid>
@@ -103,7 +103,7 @@ export default function PointCard({ point }) {
             <Grid item xs={12} sm={6}>
             <Typography style={{ color: "white", fontSize: 14 }}>
             {"Available doctors: "}
-            {point.doctorsNum}             
+            {point.numDoctor}             
           </Typography>
           </Grid>
           </Grid>
@@ -111,7 +111,7 @@ export default function PointCard({ point }) {
       </CardContent>
       <CardActions disableSpacing>
     
-        <PointSlots slots={point.sports}  />
+        <PointSlots url={url }  />
         <Button 
           endIcon={<MyLocationIcon />}
                 variant="contained"

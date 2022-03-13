@@ -71,7 +71,7 @@ export default function DoctorCard({ chat }) {
           <Typography paragraph>Replay</Typography>
 
           <Typography paragraph>{chat.solution}</Typography>
-          {chat.solution === "abnormal"&&
+          {chat.isNormal&&
            <Grid container spacing={2}>
            <Grid item xs={12} sm={6}>
            <Button 

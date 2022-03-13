@@ -2,6 +2,15 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import Alert from "@mui/material/Alert";
 
+import { initializeApp } from 'firebase/app'
+import {
+  getFirestore, collection, onSnapshot,
+  addDoc, deleteDoc, doc,
+  query, where,
+  orderBy, serverTimestamp,
+  updateDoc
+} from 'firebase/firestore'
+import {getAuth,signInWithEmailAndPassword} from 'firebase/auth'
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -22,7 +31,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import {ReactSession} from 'react-client-session';
 import Navbar from "../Navbar";
 import { Label } from "@material-ui/icons";
-
+import { useNavigate } from "react-router-dom";
 const theme = createTheme();
 
 export default function SignInSide({ navigate }) {
@@ -37,6 +46,18 @@ export default function SignInSide({ navigate }) {
   const [forgetPassword, setForgetPassword] = useState(false);
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+  const route = useNavigate();
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAPPXFRcjX1HaSZ_pdLPfQYt992PvNgFo8",
+    authDomain: "cegedim-1d756.firebaseapp.com",
+    databaseURL: "https://cegedim-1d756-default-rtdb.firebaseio.com",
+    projectId: "cegedim-1d756",
+    storageBucket: "cegedim-1d756.appspot.com",
+    messagingSenderId: "65613562669",
+    appId: "1:65613562669:web:0ac78582c0237fbb7489a4",
+    measurementId: "G-490J6MR99R"
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -49,43 +70,56 @@ export default function SignInSide({ navigate }) {
       check = 1;
     }
     if (check === 0) {
-      var values = {
-        userName: data.get("username"),
-        password: data.get("password"),
-      };
-      var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-      console.log(values);
-      var requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: JSON.stringify(values),
-        redirect: "follow",
-      };
-
-      fetch(`http://localhost:8082/api/auth/sign-in`, requestOptions)
-        .then((response) => response.json())
-        .then((res) => {
-          console.log(res);
-          if (res.statusCode === -1) {
-            //wrong username
-            setError(1);
-            setErrorMessage("User Not Registered!!");
-            setType("warning");
-            check = 1;
-          } else if (res.statusCode === -2) {
-            //wrong password
-            setError(1);
-            setErrorMessage("Wrong password!!");
-            setType("warning");
-            check = 1;
-          } else {
-            var session = {userName:data.get("username"),Id:res.userId ,role:res.role};
-            ReactSession.set("user",session);
-            navigate("/");
-          }
-        })
-        .catch((error) => console.log("error", error));
+      initializeApp(firebaseConfig)
+       
+      // init services
+             const db = getFirestore()
+             const auth = getAuth()
+           
+             signInWithEmailAndPassword(auth,
+              String(data.get("username"))  ,  String(data.get("password"))
+            ).then(cred => {
+               
+              console.log(cred.user)
+              // let values = {
+               
+              //   userName: String(data.get("username")),
+              //   password: String(data.get("password")),
+                
+              // };
+              // db.collection("users").doc().set({name:"ahmed waleed"})
+              // .then(()=>{
+              //   console.log("sucess")
+              // })
+              // .catch(()=>{
+              //   console.log("error")
+              // })
+              let myHeaders = new Headers();
+              myHeaders.append("Content-Type", "application/json");
+              var requestOptions = {
+                method: "GET",
+                headers : myHeaders,
+                redirect: "follow",
+                //body: JSON.stringify(values)
+              };
+      
+              // console.log(values);
+              fetch("https://us-central1-cegedim-1d756.cloudfunctions.net/users/"+cred.user.uid, requestOptions)
+              .then((response) => {
+                
+                response.text()})
+                .then((data)=>{
+                  console.log(data);
+                  route('/');
+                })
+                .catch((error) => console.log("error", error));
+      
+            }).catch(err => {
+                console.log(err)
+            })
+      
+          
+            
     }
   };
 

@@ -4,6 +4,16 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 
+import { initializeApp } from 'firebase/app'
+import {
+  getFirestore, collection, onSnapshot,
+  addDoc, deleteDoc, doc,
+  query, where,
+  orderBy, serverTimestamp,
+  updateDoc
+} from 'firebase/firestore'
+import {getAuth,createUserWithEmailAndPassword} from 'firebase/auth'
+
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -22,8 +32,9 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { ReactSession } from "react-client-session";
-
+import { useNavigate } from "react-router-dom";
 export default function SignUp({ navigate }) {
+  const route = useNavigate();
   const [state, setState] = useState({
     firstName: "",
     lastName: "",
@@ -41,9 +52,20 @@ export default function SignUp({ navigate }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [type, setType] = useState("");
 
+  const firebaseConfig = {
+    apiKey: "AIzaSyAPPXFRcjX1HaSZ_pdLPfQYt992PvNgFo8",
+    authDomain: "cegedim-1d756.firebaseapp.com",
+    databaseURL: "https://cegedim-1d756-default-rtdb.firebaseio.com",
+    projectId: "cegedim-1d756",
+    storageBucket: "cegedim-1d756.appspot.com",
+    messagingSenderId: "65613562669",
+    appId: "1:65613562669:web:0ac78582c0237fbb7489a4",
+    measurementId: "G-490J6MR99R"
+  };
   //go to backend
 
   const handleSubmit = (event) => {
+    var uid ;
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     if (
@@ -61,66 +83,79 @@ export default function SignUp({ navigate }) {
       setErrorMessage("Please fill all fields!");
       setType("warning");
     } else {
-      if (
-        !validator.isStrongPassword(data.get("password"), {
-          minLength: 8,
-          minLowercase: 1,
-          minUppercase: 1,
-          minNumbers: 1,
-          minSymbols: 1,
-        })
-      ) {
-        setError(1);
-        setErrorMessage("Please enter a strong password");
-        setType("warning");
-      } else {
-        console.log(data);
-        var values = {
-          firstName: data.get("firstName"),
-          lastName: data.get("lastName"),
-          password: data.get("password"),
-          userName: data.get("username"),
-          birth_date: data.get("birthdate"),
-          phoneNumber: data.get("mobile"),
-          question: data.get("question"),
-          answer: data.get("answer"),
-          age: data.get(null),
-          role: "trainee",
+      // if (
+      //   !validator.isStrongPassword(data.get("password"), {
+      //     minLength: 8,
+      //     minLowercase: 1,
+      //     minUppercase: 1,
+      //     minNumbers: 1,
+      //     minSymbols: 1,
+      //   })
+      // ) {
+      //   setError(1);
+      //   setErrorMessage("Please enter a strong password");
+      //   setType("warning");
+      // } else {
+       // console.log(data);
+       
+      
+  
+        initializeApp(firebaseConfig)
+       
+// init services
+       const db = getFirestore()
+       const auth = getAuth()
+       let valuesExt= {} ;
+       createUserWithEmailAndPassword(auth,
+        String(data.get("username"))  ,  String(data.get("password"))
+      ).then(cred => {
+         
+        console.log(cred.user)
+        let values = {
+          firstName: String(data.get("firstName")),
+          lastName: String(data.get("lastName")),
+          userName: String(data.get("username")),
+          birth_date: String(data.get("birthdate")),
+          phoneNumber:String( data.get("mobile")),
+          uid: String(cred.user.uid)
+          
         };
-
-        var myHeaders = new Headers();
+        // db.collection("users").doc().set({name:"ahmed waleed"})
+        // .then(()=>{
+        //   console.log("sucess")
+        // })
+        // .catch(()=>{
+        //   console.log("error")
+        // })
+        let myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-
         var requestOptions = {
           method: "POST",
-          headers: myHeaders,
-          body: JSON.stringify(values),
+          headers : myHeaders,
           redirect: "follow",
+          body: JSON.stringify(values)
         };
 
-        fetch("http://localhost:8082/api/sign-up/", requestOptions)
-          .then((response) => response.json())
-          .then((res) => {
-            console.log(res);
-            if (res.statusCode === -1) {
-              setError(1);
-              setErrorMessage("UserName already exists !");
-              setType("error");
-            } else {
-              var session = {
-                userName: data.userName,
-                Id: res.userId,
-                role: res.role,
-              };
-              ReactSession.set("user", session);
-              navigate("/");
-              console.log(res);
-            }
+        console.log(values);
+        fetch("https://us-central1-cegedim-1d756.cloudfunctions.net/users/", requestOptions)
+          .then(()=>{
+            route('/');
           })
           .catch((error) => console.log("error", error));
-      }
-    }
-  };
+
+      }).catch(err => {
+          console.log(err)
+      })
+
+    
+      
+    
+     
+       
+     }}    ;
+ 
+   
+
   const handleClickShowPassword = () => {
     setState({
       ...state,
@@ -196,7 +231,7 @@ export default function SignUp({ navigate }) {
                 <OutlinedInput
                   required
                   fullWidth
-                  id="userName"
+                  id="username"
                   label="Username"
                   name="username"
                   autoComplete="username"

@@ -7,81 +7,26 @@ import Navbar from "../Navbar";
 const AllDoctorChats = ({history}) => {
   //on opening the page this data should be fetched from the backend
   const [doctorChats, setDoctorChats] = useState([]);
-  const docotorChats = [
-    {
-      id: 1,
-      title: "I have 40 c heat",
-      description:
-        "To lose weight, most people need to reduce the number of calories they get from food and beverages (energy IN) and increase their physical activity (energy OUT)",
 
-      solution:
-        "abnormal"
-    },
-    {
-      id: 2,
-      title: "I have headache",
-      description:
-        "To lose weight, most people need to reduce the number of calories they get from food and beverages (energy IN) and increase their physical activity (energy OUT)",
-
-      details:
-        "Emphasizes vegetables, fruits, whole grains, and fat-free or low-fat dairy products Includes lean meats, poultry, fish, beans, eggs, and nuts Limits saturated and trans fats, sodium, and added sugars Controls portion sizes",
-    solution:
-    "Normal"
-      },
-    {
-      id: 3,
-      title: "I need to go sport",
-      description:
-        "To lose weight, most people need to reduce the number of calories they get from food and beverages (energy IN) and increase their physical activity (energy OUT)",
-
-      details:
-        "Emphasizes vegetables, fruits, whole grains, and fat-free or low-fat dairy products Includes lean meats, poultry, fish, beans, eggs, and nuts Limits saturated and trans fats, sodium, and added sugars Controls portion sizes",
-    },
-    {
-      id: 3,
-      title: "I have to travel ",
-      description:
-        "To lose weight, most people need to reduce the number of calories they get from food and beverages (energy IN) and increase their physical activity (energy OUT)",
-
-      details:
-        "Emphasizes vegetables, fruits, whole grains, and fat-free or low-fat dairy products Includes lean meats, poultry, fish, beans, eggs, and nuts Limits saturated and trans fats, sodium, and added sugars Controls portion sizes",
-    },
-    {
-      id:4,
-      title: "I have algery what type of vaccine to take",
-      description:
-        "To lose weight, most people need to reduce the number of calories they get from food and beverages (energy IN) and increase their physical activity (energy OUT)",
-      details:
-        "Emphasizes vegetables, fruits, whole grains, and fat-free or low-fat dairy products Includes lean meats, poultry, fish, beans, eggs, and nuts Limits saturated and trans fats, sodium, and added sugars Controls portion sizes",
-    },
-    {
-      id: 5,
-      title: "I have headache for 5 days continously",
-      description:
-        "To lose weight, most people need to reduce the number of calories they get from food and beverages (energy IN) and increase their physical activity (energy OUT)",
-
-      details:
-        "Emphasizes vegetables, fruits, whole grains, and fat-free or low-fat dairy products Includes lean meats, poultry, fish, beans, eggs, and nuts Limits saturated and trans fats, sodium, and added sugars Controls portion sizes",
-    },
-  ];
+    
+ 
+   
  useEffect(() => {
-     setDoctorChats(docotorChats);
-  //     var myHeaders = new Headers();
-  //     myHeaders.append("Content-Type", "application/json");
-  //     var requestOptions = {
-  //       method: "GET",
-  //       headers: myHeaders,
-  //       redirect: "follow",
-  //     };
-  //     fetch("http://localhost:8082/api/static/tips/work-out", requestOptions)
-  //       .then((response) => response.json())
-  //       .then((data)=>{
-  //         for(var i = 0; i < data.length; i++){
-  //             data[i].id = i + 1;
-  //         }
-  //         setWorkOutTips(data);
-  //       })
-  //       .catch((error) => console.log("error", error));
+  
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+      fetch("https://us-central1-cegedim-1d756.cloudfunctions.net/doctorComplaints/"+"/Ntz2rdxDPWHoijPKPHLt", requestOptions)
+        .then((response) => response.json())
+        .then((data)=>{
+          
+          setDoctorChats(data);
+        })
+        .catch((error) => console.log("error", error));
      },[]);
   return (
 

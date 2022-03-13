@@ -7,77 +7,23 @@ import Navbar from "../Navbar";
 const AllComplains = ({history}) => {
   //on opening the page this data should be fetched from the backend
   const [complains, setComplains] = useState([]);
-  const complainsData = [
-    {
-      id: 1,
-      title: "The vaccine type",
-      description:
-        "To lose weight, most people need to reduce the number of calories they get from food and beverages (energy IN) and increase their physical activity (energy OUT)",
-
-      solution:
-        "Emphasizes vegetables, fruits, whole grains, and fat-free or low-fat dairy products Includes lean meats, poultry, fish, beans, eggs, and nuts Limits saturated and trans fats, sodium, and added sugars Controls portion sizes",
-    },
-    {
-      id: 2,
-      title: "The date missed",
-      description:
-        "To lose weight, most people need to reduce the number of calories they get from food and beverages (energy IN) and increase their physical activity (energy OUT)",
-
-      details:
-        "Emphasizes vegetables, fruits, whole grains, and fat-free or low-fat dairy products Includes lean meats, poultry, fish, beans, eggs, and nuts Limits saturated and trans fats, sodium, and added sugars Controls portion sizes",
-    },
-    {
-      id: 3,
-      title: "The queue delay is large",
-      description:
-        "To lose weight, most people need to reduce the number of calories they get from food and beverages (energy IN) and increase their physical activity (energy OUT)",
-
-      details:
-        "Emphasizes vegetables, fruits, whole grains, and fat-free or low-fat dairy products Includes lean meats, poultry, fish, beans, eggs, and nuts Limits saturated and trans fats, sodium, and added sugars Controls portion sizes",
-    },
-    {
-      id: 4,
-      title: "Change the gov 20 number",
-      description:
-        "To lose weight, most people need to reduce the number of calories they get from food and beverages (energy IN) and increase their physical activity (energy OUT)",
-
-      details:
-        "Emphasizes vegetables, fruits, whole grains, and fat-free or low-fat dairy products Includes lean meats, poultry, fish, beans, eggs, and nuts Limits saturated and trans fats, sodium, and added sugars Controls portion sizes",
-    },
-    {
-      id: 5,
-      title: "data missmatch",
-      description:
-        "To lose weight, most people need to reduce the number of calories they get from food and beverages (energy IN) and increase their physical activity (energy OUT)",
-
-      details:
-        "Emphasizes vegetables, fruits, whole grains, and fat-free or low-fat dairy products Includes lean meats, poultry, fish, beans, eggs, and nuts Limits saturated and trans fats, sodium, and added sugars Controls portion sizes",
-    },
-    {
-      id: 6,
-      title: "Do n't need vaccine any more",
-      description:
-        "To lose weight, most people need to reduce the number of calories they get from food and beverages (energy IN) and increase their physical activity (energy OUT)",
-
-      details:
-        "Emphasizes vegetables, fruits, whole grains, and fat-free or low-fat dairy products Includes lean meats, poultry, fish, beans, eggs, and nuts Limits saturated and trans fats, sodium, and added sugars Controls portion sizes",
-    },
-  ];
+  
+   
   useEffect(() => {
-   setComplains(complainsData);
-  //     var myHeaders = new Headers();
-  //     myHeaders.append("Content-Type", "application/json");
-  //     var requestOptions = {
-  //       method: "GET",
-  //       headers: myHeaders,
-  //       redirect: "follow",
-  //     };
-  //     fetch("http://localhost:8082/api/static/tips/health", requestOptions)
-  //       .then((response) => response.json())
-  //       .then((data)=>{
-  //         setHealthTips(data);
-  //       })
-  //       .catch((error) => console.log("error", error));
+   
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      var requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+      fetch("https://us-central1-cegedim-1d756.cloudfunctions.net/complains"+"/Ntz2rdxDPWHoijPKPHLt", requestOptions)
+        .then((response) => response.json())
+        .then((data)=>{
+          setComplains(data);
+        })
+        .catch((error) => console.log("error", error));
      },[]);
   return (
    
